@@ -56,7 +56,7 @@ navigator.getUserMedia(
 );
 
 const peer = new Peer(undefined, {
-    host: "p2p-video-call-mern.herokuapp.com",
+    host: location.origin.replace(/^http/, 'ws'),
     port: 8000,
     path: "/peerjs",
 });
