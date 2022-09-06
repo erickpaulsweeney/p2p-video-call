@@ -14,6 +14,7 @@ const addVideo = (video, stream) => {
 };
 
 const peers = {};
+let selfId;
 
 navigator.getUserMedia(
     {
@@ -27,6 +28,7 @@ navigator.getUserMedia(
         });
 
         socket.on("user-connected", (userId) => {
+            if (userId === selfId) return;
             console.log("New user", userId);
             console.log("Call made");
             const call = peer.call(userId, stream);
@@ -64,17 +66,9 @@ const peer = new Peer(undefined, {
 let callList = {};
 
 peer.on("open", (id) => {
+    selfId = id;
     console.log("Peer ID", id);
     socket.emit("join-room", { roomId: ROOM_ID, userId: id });
-});
-
-socket.on("user-add", (id) => {
-    let conn = peer.connect(id);
-
-    conn.on("close", () => {
-        console.log("Connection removed");
-        manualClose(id);
-    });
 });
 
 peer.on("call", (call) => {
