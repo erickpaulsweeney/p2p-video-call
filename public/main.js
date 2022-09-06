@@ -56,8 +56,8 @@ navigator.getUserMedia(
 );
 
 const peer = new Peer(undefined, {
-    host: location.origin.replace(/^http/, 'ws'),
-    port: 8000,
+    host: location.hostname,
+    port: location.port,
     path: "/peerjs",
 });
 
